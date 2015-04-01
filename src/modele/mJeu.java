@@ -17,7 +17,7 @@ public class mJeu extends Modele {
 
     public static boolean demandeMap() {
 
-	System.out.println("-Attente MAP...");
+	System.out.print("-Attente MAP...");
 	Paquet paqMap = null;
 	try {
 	    paqMap = InputReader.listPaquet.waitPaquet("map");
@@ -27,16 +27,20 @@ public class mJeu extends Modele {
 	}
 
 	map = new Map(recupMap(paqMap));
+	System.out.println("recu.");
+	return recupPosition();
+    }
 
-	return true;
+    private static boolean recupPosition() {
+	Joueur.position = map.getPosJoueur();
+	return Joueur.position != null;
     }
 
     private static int[][] recupMap(Paquet paqMap) {
 
 	String[] temp;
 	String[] lignes = paqMap.getFirstMessage().split(" ");
-	int size = lignes[0].split("\\.").length;
-	int[][] _map = new int[size][size];
+	int[][] _map = new int[lignes.length][lignes[0].split("\\.").length];
 
 	for (int i = 0; i < lignes.length; i++) {
 	    temp = lignes[i].split("\\.");
@@ -45,6 +49,10 @@ public class mJeu extends Modele {
 	    }
 	}
 	return _map;
+    }
+
+    public static Map getMap() {
+	return map;
     }
 
 }

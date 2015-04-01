@@ -23,10 +23,11 @@ public class cLancement extends Controleur {
     @Override
     public void lancer() {
 	mJeu.demandeMap();
-	vue = new vJeu(this, WINDOW_WIDTH, WINDOW_HEIGHT);
+	vue = new vJeu(this, mJeu.getMap().getTab(), WINDOW_WIDTH, WINDOW_HEIGHT);
 	vue.show();
 	vue.getStage().setOnCloseRequest((event) -> {
 	    mConnexion.deconnexion();
+	    vue.stop();
 	});
     }
 
