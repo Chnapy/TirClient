@@ -6,7 +6,9 @@
 package vue;
 
 import static java.lang.Thread.sleep;
+import javafx.animation.TranslateTransition;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 /**
  * vJoueur.java
@@ -14,7 +16,6 @@ import javafx.scene.image.ImageView;
  */
 public class vJoueur extends ImageView implements Runnable {
 
-    private static final int temps = 5000;
     private static final String prepathP = "assets/player/";
     private static final String prepathL = "assets/lasers/";
     private static final String[] joueurs = {
@@ -37,25 +38,32 @@ public class vJoueur extends ImageView implements Runnable {
 	"laserBlue04.png", //TODO : Orange
 	"laserRed04.png"
     };
+    private static final int temps = 500;
+    private final TranslateTransition transition;
+
     public final int ID;
+    public final Thread th;
+    private boolean run;
     public int move;
 
     public vJoueur(int id) {
 	super(prepathP + joueurs[id % joueurs.length]);
 	ID = id;
-	new Thread(this).start();
+	th = new Thread(this);
+	transition = new TranslateTransition(new Duration(temps), this);
+	th.start();
+    }
+
+    public void stop() {
+	run = false;
     }
 
     public void toTop() {
 	this.setRotate(0);
-	try {
-	    for (int i = 0; i < (int) vJeu.modHeight; i++) {
-		this.setLayoutY(getLayoutY() - 1);
-		sleep(temps / (int) vJeu.modHeight);
-	    }
-	} catch (InterruptedException e) {
-
-	}
+	transition.setFromY(getY());
+	transition.setToY(getY() - (int) vJeu.modHeight);
+	transition.play();
+	//todo
     }
 
     public void toBottom() {
@@ -97,24 +105,28 @@ public class vJoueur extends ImageView implements Runnable {
     @Override
     public void run() {
 	move = 0;
-	while (true) {
+	run = true;
+	while (run) {
 	    switch (move) {
 		case 1:
+		    move = 0;
 		    toLeft();
 		    break;
 		case 2:
+		    move = 0;
 		    toRight();
 		    break;
 		case 3:
+		    move = 0;
 		    toTop();
 		    break;
 		case 4:
+		    move = 0;
 		    toBottom();
 		    break;
 		default:
 		    break;
 	    }
-	    move = 0;
 	}
     }
 

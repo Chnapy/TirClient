@@ -18,7 +18,7 @@ public class mJeu extends Modele {
     public static boolean demandeMap() {
 
 	System.out.print("-Attente MAP...");
-	Paquet paqMap = null;
+	Paquet paqMap;
 	try {
 	    paqMap = InputReader.listPaquet.waitPaquet("map");
 	} catch (Exception e) {

@@ -5,16 +5,15 @@
  */
 package vue;
 
-import static java.lang.Thread.sleep;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.animation.RotateTransition;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 /**
  * Meteor.java
  *
  */
-public class Meteor extends ImageView implements Runnable {
+public class Meteor extends ImageView {
 
     private static final String prepath = "assets/tuiles/meteor/";
     private static final String[] images = {
@@ -27,30 +26,19 @@ public class Meteor extends ImageView implements Runnable {
 	"meteorGrey_big3.png",
 	"meteorGrey_big4.png"
     };
-    private Thread th;
-    private boolean run;
+    private final RotateTransition rotationAnimation;
 
     public Meteor() {
 	super(prepath + images[(int) (Math.random() * images.length)]);
-	th = new Thread(this);
-	th.start();
+	rotationAnimation = new RotateTransition(new Duration(10000), this);
+	rotationAnimation.setByAngle(360f);
+        rotationAnimation.setCycleCount(10);
+	rotationAnimation.play();
+	
     }
     
     public void stop() {
-	run = false;
-    }
-
-    @Override
-    public void run() {
-	run = true;
-	try {
-	    while (run) {
-		this.setRotate(this.getRotate() + 1);
-		sleep(100);
-	    }
-	} catch (InterruptedException ex) {
-	    Logger.getLogger(Meteor.class.getName()).log(Level.SEVERE, null, ex);
-	}
+	rotationAnimation.stop();
     }
 
 }

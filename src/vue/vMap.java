@@ -7,6 +7,8 @@ package vue;
 
 import controleur.General;
 import java.util.ArrayList;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
@@ -18,7 +20,7 @@ public class vMap extends GridPane {
 
     private static final String prepath = "assets/tuiles/";
     private static final String[] images = {
-	"tuile0.png"
+	"tuile-1.png"
     };
     private ArrayList<Meteor> meteors;
 
@@ -42,9 +44,11 @@ public class vMap extends GridPane {
 			im = new ImageView();
 			break;
 		}
-		this.add(im, i, j);
 		im.setFitWidth(General.WINDOW_WIDTH / map.length);
 		im.setPreserveRatio(true);
+		this.add(im, i, j);
+		GridPane.setHalignment(im, HPos.CENTER);
+		GridPane.setValignment(im, VPos.CENTER);
 	    }
 	}
     }

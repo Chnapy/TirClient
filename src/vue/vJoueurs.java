@@ -7,6 +7,7 @@ package vue;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import modele.Joueur;
 
 /**
  * vJoueurs.java
@@ -14,8 +15,10 @@ import javafx.scene.layout.Pane;
  */
 public class vJoueurs extends Pane {
 
-    public vJoueurs(int[][] map) {
+    private vJoueur joueur;
 
+    public vJoueurs(int[][] map) {
+	joueur = null;
 	applyMap(map);
     }
 
@@ -24,21 +27,30 @@ public class vJoueurs extends Pane {
 	for (int i = 0; i < map.length; i++) {
 	    for (int j = 0; j < map[0].length; j++) {
 		if (map[i][j] >= 2) {
-		    vJoueur joueur = new vJoueur(map[i][j]);
-		    this.getChildren().add(joueur);
-		    joueur.setLayoutX(i * vJeu.modWidth);
-		    joueur.setLayoutY(j * vJeu.modHeight);
-		    joueur.setFitWidth(vJeu.modWidth);
-		    joueur.setPreserveRatio(true);
+		    vJoueur jr = new vJoueur(map[i][j]);
+		    this.getChildren().add(jr);
+		    jr.setLayoutX(i * vJeu.modWidth);
+		    jr.setLayoutY(j * vJeu.modHeight);
+		    jr.setFitWidth(vJeu.modWidth);
+		    jr.setPreserveRatio(true);
+		    if (joueur == null && map[i][j]-2 == Joueur.ID) {
+			joueur = jr;
+		    }
 		}
 	    }
 	}
     }
 
+    public void stop() {
+	this.getChildren().stream().forEach((joueur) -> {
+	    ((vJoueur) joueur).stop();
+	});
+    }
+
     public void move(int id, boolean horizontal, boolean gauche) {
 	vJoueur j = null;
-	for (Node joueur : this.getChildren()) {
-	    j = (vJoueur) joueur;
+	for (Node jr : this.getChildren()) {
+	    j = (vJoueur) jr;
 	    if (j.ID == id) {
 		break;
 	    }
@@ -59,6 +71,26 @@ public class vJoueurs extends Pane {
 		}
 	    }
 	}
+    }
+
+    public void moveJoueur(boolean horizontal, boolean gauche) {
+	if (horizontal) {
+	    if (gauche) {
+		joueur.toLeft();
+	    } else {
+		joueur.toRight();
+	    }
+	} else {
+	    if (gauche) {
+		joueur.toTop();
+	    } else {
+		joueur.toBottom();
+	    }
+	}
+    }
+
+    public vJoueur getJoueur() {
+	return joueur;
     }
 
 }

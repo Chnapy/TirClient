@@ -25,7 +25,7 @@ public class Options extends HBox {
 
     public Options(HUD hud) {
 	maxwidth = 0;
-	getChildren().addAll(getButton(fermerImage), getButton(deconnecterImage));
+	getChildren().addAll(getButton(deconnecterImage), getButton(fermerImage));
 	setWidth(maxwidth);
 
 	((Button) getChildren().get(1)).setOnAction((event) -> {
@@ -41,7 +41,6 @@ public class Options extends HBox {
 	but.setMinWidth(BUTTONWIDTH);
 	but.setMaxWidth(BUTTONWIDTH);
 	maxwidth += BUTTONWIDTH;
-//	but.setPadding(Insets.EMPTY);
 	but.setId("option" + maxwidth / BUTTONWIDTH);
 
 	return but;

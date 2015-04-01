@@ -27,15 +27,15 @@ public class vJeu extends Vue {
     public static double modWidth;
     public static double modHeight;
 
-    private vMap map;
-    private vJoueurs joueurs;
-    private HUD hud;
-    private Pane vb;
+    private final vMap map;
+    private final vJoueurs joueurs;
+    private final HUD hud;
+    private final Pane vb;
 
     public vJeu(Controleur controleur, int[][] tabMap, double width, double height) {
 	super(controleur, new Pane(), width, height);
 	modWidth = General.WINDOW_WIDTH / tabMap.length;
-	modHeight = General.WINDOW_HEIGHT / tabMap[0].length;
+	modHeight = General.WINDOW_HEIGHT / tabMap.length;
 	vb = (Pane) scene.getRoot();
 	vb.setBackground(new Background(
 		new BackgroundImage(new Image(lienBack), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)
@@ -49,6 +49,9 @@ public class vJeu extends Vue {
 
     @Override
     public void update(Observable o, Object arg) {
+	if ((int) arg == -1) {
+	    stop();
+	}
     }
 
     @Override
@@ -67,7 +70,27 @@ public class vJeu extends Vue {
     }
 
     public void stop() {
+	joueurs.stop();
 	map.stop();
+    }
+
+    public void actionJoueur(String keytext) {
+	switch (keytext.toLowerCase()) {
+	    case "q":
+		joueurs.moveJoueur(true, true);
+		break;
+	    case "d":
+		joueurs.moveJoueur(true, false);
+		break;
+	    case "z":
+		joueurs.moveJoueur(false, true);
+		break;
+	    case "s":
+		joueurs.moveJoueur(false, false);
+		break;
+	    default:
+		break;
+	}
     }
 
 }
