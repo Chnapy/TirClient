@@ -1,1 +1,2 @@
 # TirClient
+Nécessite Java8
