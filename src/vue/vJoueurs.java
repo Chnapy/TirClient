@@ -5,6 +5,7 @@
  */
 package vue;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import modele.Joueur;
@@ -22,7 +23,7 @@ public class vJoueurs extends Pane {
 	applyMap(map);
     }
 
-    private void applyMap(int[][] map) {
+    private void applyMap(final int[][] map) {
 
 	for (int i = 0; i < map.length; i++) {
 	    for (int j = 0; j < map[0].length; j++) {
@@ -71,24 +72,24 @@ public class vJoueurs extends Pane {
 	}
     }
 
-    public boolean moveJoueur(boolean horizontal, boolean gauche) {
-	if (horizontal) {
-	    if (gauche) {
-		return joueur.toLeft();
-	    } else {
-		return joueur.toRight();
-	    }
-	} else {
-	    if (gauche) {
-		return joueur.toTop();
-	    } else {
-		return joueur.toBottom();
-	    }
+    public void moveJoueur(final int x, final int y) {
+	if(Joueur.position.x > x) {
+	    joueur.toLeft();
+	} else if(Joueur.position.x < x) {
+	    joueur.toRight();
+	} else if(Joueur.position.y > y) {
+	    joueur.toTop();
+	} else if(Joueur.position.y < y) {
+	    joueur.toBottom();
 	}
     }
 
     public vJoueur getJoueur() {
 	return joueur;
+    }
+    
+    public TranslateTransition getJTransition() {
+	return joueur.getTransition();
     }
 
 }

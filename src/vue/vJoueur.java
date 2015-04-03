@@ -39,76 +39,42 @@ public class vJoueur extends ImageView {
     };
     private static final int temps = 500;
     private final TranslateTransition transition;
-    private boolean canMove;
 
     public final int ID;
     public int move;
 
-    public vJoueur(int id) {
+    public vJoueur(final int id) {
 	super(prepathP + joueurs[id % joueurs.length]);
 	ID = id;
 	transition = new TranslateTransition(new Duration(temps), this);
-	canMove = true;
     }
 
-    public boolean toTop() {
-	if(!canMove)
-	    return false;
-	canMove = false;
+    public void toTop() {
 	this.setRotate(0);
 	transition.setByY(-vJeu.modHeight);
-	transition.setOnFinished((event) -> {
-	    transition.setByX(0);
-	    transition.setByY(0);
-	    canMove = true;
-	});
 	transition.play();
-	return true;
     }
 
-    public boolean toBottom() {
-	if(!canMove)
-	    return false;
-	canMove = false;
+    public void toBottom() {
 	this.setRotate(180);
 	transition.setByY(vJeu.modHeight);
-	transition.setOnFinished((event) -> {
-	    transition.setByX(0);
-	    transition.setByY(0);
-	    canMove = true;
-	});
 	transition.play();
-	return true;
     }
 
-    public boolean toLeft() {
-	if(!canMove)
-	    return false;
-	canMove = false;
+    public void toLeft() {
 	this.setRotate(270);
 	transition.setByX(-vJeu.modWidth);
-	transition.setOnFinished((event) -> {
-	    transition.setByX(0);
-	    transition.setByY(0);
-	    canMove = true;
-	});
 	transition.play();
-	return true;
     }
 
-    public boolean toRight() {
-	if(!canMove)
-	    return false;
-	canMove = false;
+    public void toRight() {
 	this.setRotate(90);
 	transition.setByX(vJeu.modWidth);
-	transition.setOnFinished((event) -> {
-	    transition.setByX(0);
-	    transition.setByY(0);
-	    canMove = true;
-	});
 	transition.play();
-	return true;
+    }
+
+    public TranslateTransition getTransition() {
+	return transition;
     }
 
 }

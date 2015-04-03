@@ -34,26 +34,12 @@ public class mConnexion {
 	for (int i = 1; i < message.length; i++) {
 	    mess += ":" + message[i];
 	}
-	sout.println("#" + Joueur.ID + ":" + commande + ":" + mess);
+	System.out.println("E : " + commande + " : " + mess);
+	sout.println(commande + ":" + mess);
 	sout.flush();
     }
 
-    public static void envoiPos(boolean horizontal, boolean gauche) {
-	int x = Joueur.position.x;
-	int y = Joueur.position.y;
-	if (horizontal) {
-	    if (gauche) {
-		x--;
-	    } else {
-		x++;
-	    }
-	} else {
-	    if (gauche) {
-		y--;
-	    } else {
-		y++;
-	    }
-	}
+    public static void envoiPos(int x, int y) {
 	envoi("move", Integer.toString(x), Integer.toString(y));
     }
 

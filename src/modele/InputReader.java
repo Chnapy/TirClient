@@ -1,6 +1,6 @@
 /*
  * 
- * test test
+ * 
  * 
  */
 package modele;
@@ -34,8 +34,8 @@ public class InputReader implements Runnable {
 	    while (run) {
 		reception = input.readLine();
 		if (!reception.isEmpty()) {
+		    System.out.println("R : " + reception);
 		    listPaquet.add(new Paquet(reception));
-		    System.out.println(listPaquet.size() + " " + reception);
 		}
 	    }
 	} catch (IOException ex) {
@@ -45,7 +45,7 @@ public class InputReader implements Runnable {
 	}
 	System.err.println("InputReader stoppé.");
     }
-    
+
     public void start() {
 	thread.start();
     }
