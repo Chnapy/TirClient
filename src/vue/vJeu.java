@@ -16,6 +16,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import modele.Map;
 
 /**
  * vJeu.java
@@ -34,8 +35,8 @@ public class vJeu extends Vue {
 
     public vJeu(Controleur controleur, int[][] tabMap, double width, double height) {
 	super(controleur, new Pane(), width, height);
-	modWidth = General.WINDOW_WIDTH / tabMap.length;
-	modHeight = General.WINDOW_HEIGHT / tabMap.length;
+	modWidth = General.WINDOW_WIDTH / Map.MAP_WIDTH;
+	modHeight = modWidth;
 	vb = (Pane) scene.getRoot();
 	vb.setBackground(new Background(
 		new BackgroundImage(new Image(lienBack), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)
@@ -74,23 +75,8 @@ public class vJeu extends Vue {
 	map.stop();
     }
 
-    public void actionJoueur(String keytext) {
-	switch (keytext.toLowerCase()) {
-	    case "q":
-		joueurs.moveJoueur(true, true);
-		break;
-	    case "d":
-		joueurs.moveJoueur(true, false);
-		break;
-	    case "z":
-		joueurs.moveJoueur(false, true);
-		break;
-	    case "s":
-		joueurs.moveJoueur(false, false);
-		break;
-	    default:
-		break;
-	}
+    public vJoueurs getJoueurs() {
+	return joueurs;
     }
 
 }

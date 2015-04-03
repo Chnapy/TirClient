@@ -13,10 +13,15 @@ import java.awt.Point;
  */
 public class Map {
 
-    private int[][] tabTuiles;
+    public static int MAP_WIDTH;
+    public static int MAP_HEIGHT;
+
+    private final int[][] tabTuiles;
 
     public Map(final int[][] tab) {
 	tabTuiles = tab;
+	MAP_WIDTH = tab.length;
+	MAP_HEIGHT = tab[0].length;
     }
 
     public int getTuile(int x, int y) {
@@ -38,7 +43,7 @@ public class Map {
     public Point getPosJoueur() {
 	for (int i = 0; i < tabTuiles.length; i++) {
 	    for (int j = 0; j < tabTuiles[0].length; j++) {
-		if (tabTuiles[i][j] == Joueur.ID) {
+		if (tabTuiles[i][j] - 2 == Joueur.ID) {
 		    return new Point(i, j);
 		}
 	    }

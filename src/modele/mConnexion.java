@@ -29,6 +29,34 @@ public class mConnexion {
 	socketClient = null;
     }
 
+    public static void envoi(String commande, String... message) {
+	String mess = message[0];
+	for (int i = 1; i < message.length; i++) {
+	    mess += ":" + message[i];
+	}
+	sout.println("#" + Joueur.ID + ":" + commande + ":" + mess);
+	sout.flush();
+    }
+
+    public static void envoiPos(boolean horizontal, boolean gauche) {
+	int x = Joueur.position.x;
+	int y = Joueur.position.y;
+	if (horizontal) {
+	    if (gauche) {
+		x--;
+	    } else {
+		x++;
+	    }
+	} else {
+	    if (gauche) {
+		y--;
+	    } else {
+		y++;
+	    }
+	}
+	envoi("move", Integer.toString(x), Integer.toString(y));
+    }
+
     public static boolean connecter(String servIp, int servPort) {
 
 	System.out.println("--- Connexion au serveur ---");
@@ -56,8 +84,7 @@ public class mConnexion {
 
 	System.out.println("--- Demande pseudo ---");
 
-	sout.println("pseudo:" + pseudo);
-	sout.flush();
+	envoi("pseudo", pseudo);
 	System.out.println("-Demande envoyée");
 	return true;
     }

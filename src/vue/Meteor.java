@@ -32,11 +32,11 @@ public class Meteor extends ImageView {
 	super(prepath + images[(int) (Math.random() * images.length)]);
 	rotationAnimation = new RotateTransition(new Duration(10000), this);
 	rotationAnimation.setByAngle(360f);
-        rotationAnimation.setCycleCount(10);
+	rotationAnimation.setCycleCount(10);
 	rotationAnimation.play();
-	
+
     }
-    
+
     public void stop() {
 	rotationAnimation.stop();
     }

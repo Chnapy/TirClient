@@ -5,7 +5,6 @@
  */
 package vue;
 
-import static java.lang.Thread.sleep;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -14,7 +13,7 @@ import javafx.util.Duration;
  * vJoueur.java
  *
  */
-public class vJoueur extends ImageView implements Runnable {
+public class vJoueur extends ImageView {
 
     private static final String prepathP = "assets/player/";
     private static final String prepathL = "assets/lasers/";
@@ -40,94 +39,76 @@ public class vJoueur extends ImageView implements Runnable {
     };
     private static final int temps = 500;
     private final TranslateTransition transition;
+    private boolean canMove;
 
     public final int ID;
-    public final Thread th;
-    private boolean run;
     public int move;
 
     public vJoueur(int id) {
 	super(prepathP + joueurs[id % joueurs.length]);
 	ID = id;
-	th = new Thread(this);
 	transition = new TranslateTransition(new Duration(temps), this);
-	th.start();
+	canMove = true;
     }
 
-    public void stop() {
-	run = false;
-    }
-
-    public void toTop() {
+    public boolean toTop() {
+	if(!canMove)
+	    return false;
+	canMove = false;
 	this.setRotate(0);
-	transition.setFromY(getY());
-	transition.setToY(getY() - (int) vJeu.modHeight);
+	transition.setByY(-vJeu.modHeight);
+	transition.setOnFinished((event) -> {
+	    transition.setByX(0);
+	    transition.setByY(0);
+	    canMove = true;
+	});
 	transition.play();
-	//todo
+	return true;
     }
 
-    public void toBottom() {
+    public boolean toBottom() {
+	if(!canMove)
+	    return false;
+	canMove = false;
 	this.setRotate(180);
-	try {
-	    for (int i = 0; i < (int) vJeu.modHeight; i++) {
-		this.setLayoutY(getLayoutY() + 1);
-		sleep(temps / (int) vJeu.modHeight);
-	    }
-	} catch (InterruptedException e) {
-
-	}
+	transition.setByY(vJeu.modHeight);
+	transition.setOnFinished((event) -> {
+	    transition.setByX(0);
+	    transition.setByY(0);
+	    canMove = true;
+	});
+	transition.play();
+	return true;
     }
 
-    public void toLeft() {
+    public boolean toLeft() {
+	if(!canMove)
+	    return false;
+	canMove = false;
 	this.setRotate(270);
-	try {
-	    for (int i = 0; i < (int) vJeu.modWidth; i++) {
-		this.setLayoutX(getLayoutX() - 1);
-		sleep(temps / (int) vJeu.modWidth);
-	    }
-	} catch (InterruptedException e) {
-
-	}
+	transition.setByX(-vJeu.modWidth);
+	transition.setOnFinished((event) -> {
+	    transition.setByX(0);
+	    transition.setByY(0);
+	    canMove = true;
+	});
+	transition.play();
+	return true;
     }
 
-    public void toRight() {
+    public boolean toRight() {
+	if(!canMove)
+	    return false;
+	canMove = false;
 	this.setRotate(90);
-	try {
-	    for (int i = 0; i < (int) vJeu.modWidth; i++) {
-		this.setLayoutX(getLayoutX() + 1);
-		sleep(temps / (int) vJeu.modWidth);
-	    }
-	} catch (InterruptedException e) {
-
-	}
-    }
-
-    @Override
-    public void run() {
-	move = 0;
-	run = true;
-	while (run) {
-	    switch (move) {
-		case 1:
-		    move = 0;
-		    toLeft();
-		    break;
-		case 2:
-		    move = 0;
-		    toRight();
-		    break;
-		case 3:
-		    move = 0;
-		    toTop();
-		    break;
-		case 4:
-		    move = 0;
-		    toBottom();
-		    break;
-		default:
-		    break;
-	    }
-	}
+	transition.setByX(vJeu.modWidth);
+	transition.setOnFinished((event) -> {
+	    transition.setByX(0);
+	    transition.setByY(0);
+	    canMove = true;
+	});
+	transition.play();
+	return true;
     }
 
 }

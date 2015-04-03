@@ -33,11 +33,11 @@ public class mJeu extends Modele {
 
     private static boolean recupPosition() {
 	Joueur.position = map.getPosJoueur();
+	System.out.println(Joueur.position);
 	return Joueur.position != null;
     }
 
     private static int[][] recupMap(Paquet paqMap) {
-
 	String[] temp;
 	String[] lignes = paqMap.getFirstMessage().split(" ");
 	int[][] _map = new int[lignes.length][lignes[0].split("\\.").length];

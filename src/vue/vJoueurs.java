@@ -42,9 +42,7 @@ public class vJoueurs extends Pane {
     }
 
     public void stop() {
-	this.getChildren().stream().forEach((joueur) -> {
-	    ((vJoueur) joueur).stop();
-	});
+	
     }
 
     public void move(int id, boolean horizontal, boolean gauche) {
@@ -73,18 +71,18 @@ public class vJoueurs extends Pane {
 	}
     }
 
-    public void moveJoueur(boolean horizontal, boolean gauche) {
+    public boolean moveJoueur(boolean horizontal, boolean gauche) {
 	if (horizontal) {
 	    if (gauche) {
-		joueur.toLeft();
+		return joueur.toLeft();
 	    } else {
-		joueur.toRight();
+		return joueur.toRight();
 	    }
 	} else {
 	    if (gauche) {
-		joueur.toTop();
+		return joueur.toTop();
 	    } else {
-		joueur.toBottom();
+		return joueur.toBottom();
 	    }
 	}
     }

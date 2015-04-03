@@ -11,6 +11,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import modele.Map;
 
 /**
  * vMap.java
@@ -29,8 +30,8 @@ public class vMap extends GridPane {
 	this.setHgap(0);
 	this.setVgap(0);
 
-	for (int i = 0; i < map.length; i++) {
-	    for (int j = 0; j < map[0].length; j++) {
+	for (int i = 0; i < Map.MAP_WIDTH; i++) {
+	    for (int j = 0; j < Map.MAP_HEIGHT; j++) {
 		ImageView im;
 		switch (map[i][j]) {
 		    case -1:
@@ -44,8 +45,8 @@ public class vMap extends GridPane {
 			im = new ImageView();
 			break;
 		}
-		im.setFitWidth(General.WINDOW_WIDTH / map.length);
-		im.setPreserveRatio(true);
+		im.setFitWidth(vJeu.modWidth);
+		im.setFitHeight(vJeu.modWidth);
 		this.add(im, i, j);
 		GridPane.setHalignment(im, HPos.CENTER);
 		GridPane.setValignment(im, VPos.CENTER);
