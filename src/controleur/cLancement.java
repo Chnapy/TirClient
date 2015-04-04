@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import modele.InputReader;
 import modele.Joueur;
 import modele.Paquet;
@@ -30,6 +31,7 @@ public class cLancement extends Controleur {
 
     private vJeu vue;
     private vJoueurs joueurs;
+    private boolean canTirer;
     private boolean canMove;
     private boolean canMoveTranslate;
     private boolean run;
@@ -51,6 +53,15 @@ public class cLancement extends Controleur {
 		}
 	    } catch (Exception ex) {
 		Logger.getLogger(cLancement.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	});
+	vue.getStage().getScene().setOnMousePressed((MouseEvent event) -> {
+	    if (canTirer && Joueur.munitions > 0) {
+		canTirer = false;
+		tirer(event.getX(), event.getY());
+		Joueur.munitions--;
+		vue.getHud().getStats().delMunitions(1);
+		canTirer = true;
 	    }
 	});
 	TranslateTransition transition = joueurs.getJTransition();
@@ -81,8 +92,27 @@ public class cLancement extends Controleur {
 	    }
 	}).start();
 
+	new Thread(() -> {
+	    while (run) {
+		Paquet paq = InputReader.listPaquet.waitPaquet("tire");
+		Platform.runLater(() -> {
+		    tirer(paq.getFirstMessageToInt(), paq.getMessageToInt(1), paq.getMessageToInt(2));
+		});
+	    }
+	}).start();
+
+	canTirer = true;
 	canMove = true;
 	canMoveTranslate = true;
+    }
+
+    public void tirer(double mx, double my) {
+	int[] ret = joueurs.tirer(mx, my);
+	mConnexion.envoi("tire", Integer.toString(ret[0]), Integer.toString(ret[1]));
+    }
+
+    public void tirer(int id, double mx, double my) {
+	joueurs.tirer(id, mx, my);
     }
 
     public void actionJoueur(final String keytext) throws Exception {

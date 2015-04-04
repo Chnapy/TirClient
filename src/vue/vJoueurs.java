@@ -6,6 +6,7 @@
 package vue;
 
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import modele.Joueur;
@@ -37,18 +38,19 @@ public class vJoueurs extends Pane {
 	}
     }
 
-    public void stop() {
-
-    }
-
-    public void move(int id, int x, int y) {
+    public vJoueur getJoueur(int id) {
 	vJoueur j = null;
 	for (Node jr : this.getChildren()) {
 	    j = (vJoueur) jr;
 	    if (j.ID == id) {
-		break;
+		return j;
 	    }
 	}
+	return null;
+    }
+
+    public void move(int id, int x, int y) {
+	vJoueur j = getJoueur(id);
 	System.out.println("POS: x" + j.position.x + " y" + j.position.y + " SOP: x" + x + " y" + y);
 	if (j.position.x > x) {
 	    j.toLeft();
@@ -91,6 +93,28 @@ public class vJoueurs extends Pane {
 	jr.setFitWidth(vJeu.modWidth);
 	jr.setPreserveRatio(true);
 	return jr;
+    }
+
+    public int[] tirer(double mx, double my) {
+	vLaser laser = new vLaser(joueur.ID);
+	this.getChildren().add(laser);
+	laser.getTransition().setOnFinished((ActionEvent event) -> {
+	    this.getChildren().remove(laser);
+	});
+	int[] ret = laser.lancer(joueur.getX() + joueur.getTranslateX(), joueur.getY() + joueur.getTranslateY(), joueur.getFitWidth() / 2, joueur.getFitHeight() / 2, mx, my);
+	joueur.setRotate(laser.getRotate());
+	return ret;
+    }
+
+    public void tirer(int id, double mx, double my) {
+	vJoueur jr = getJoueur(id);
+	vLaser laser = new vLaser(id);
+	this.getChildren().add(laser);
+	laser.getTransition().setOnFinished((ActionEvent event) -> {
+	    this.getChildren().remove(laser);
+	});
+	laser.lancerAutrement(jr.getX() + jr.getTranslateX(), jr.getY() + jr.getTranslateY(), jr.getFitWidth() / 2, jr.getFitHeight() / 2, mx, my);
+	jr.setRotate(laser.getRotate());
     }
 
 }

@@ -71,12 +71,15 @@ public class vJeu extends Vue {
     }
 
     public void stop() {
-	joueurs.stop();
 	map.stop();
     }
 
     public vJoueurs getJoueurs() {
 	return joueurs;
+    }
+
+    public HUD getHud() {
+	return hud;
     }
 
 }

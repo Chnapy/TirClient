@@ -58,4 +58,8 @@ public class HUD extends Group {
 	this.vue.stop();
     }
 
+    public Stats getStats() {
+	return stats;
+    }
+
 }

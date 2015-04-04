@@ -18,7 +18,6 @@ import modele.Joueur;
 public class vJoueur extends ImageView {
 
     private static final String prepathP = "assets/player/";
-    private static final String prepathL = "assets/lasers/";
     private static final String[] joueurs = {
 	"playerShip1_blue.png",
 	"playerShip1_green.png",
@@ -32,12 +31,6 @@ public class vJoueur extends ImageView {
 	"playerShip3_green.png",
 	"playerShip3_orange.png",
 	"playerShip3_red.png"
-    };
-    private static final String[] lasers = {
-	"laserBlue04.png",
-	"laserGreen04.png",
-	"laserBlue04.png", //TODO : Orange
-	"laserRed04.png"
     };
     private static final int temps = 300;
     private final TranslateTransition transition;
