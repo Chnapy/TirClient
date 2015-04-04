@@ -28,13 +28,8 @@ public class vJoueurs extends Pane {
 	for (int i = 0; i < map.length; i++) {
 	    for (int j = 0; j < map[0].length; j++) {
 		if (map[i][j] >= 2) {
-		    vJoueur jr = new vJoueur(map[i][j]);
-		    this.getChildren().add(jr);
-		    jr.setLayoutX(i * vJeu.modWidth);
-		    jr.setLayoutY(j * vJeu.modHeight);
-		    jr.setFitWidth(vJeu.modWidth);
-		    jr.setPreserveRatio(true);
-		    if (joueur == null && map[i][j]-2 == Joueur.ID) {
+		    vJoueur jr = add(map[i][j] - 2, i, j);
+		    if (joueur == null && map[i][j] - 2 == Joueur.ID) {
 			joueur = jr;
 		    }
 		}
@@ -43,10 +38,10 @@ public class vJoueurs extends Pane {
     }
 
     public void stop() {
-	
+
     }
 
-    public void move(int id, boolean horizontal, boolean gauche) {
+    public void move(int id, int x, int y) {
 	vJoueur j = null;
 	for (Node jr : this.getChildren()) {
 	    j = (vJoueur) jr;
@@ -54,32 +49,28 @@ public class vJoueurs extends Pane {
 		break;
 	    }
 	}
-
-	if (j != null) {
-	    if (horizontal) {
-		if (gauche) {
-		    j.toLeft();
-		} else {
-		    j.toRight();
-		}
-	    } else {
-		if (gauche) {
-		    j.toTop();
-		} else {
-		    j.toBottom();
-		}
-	    }
+	System.out.println("POS: x" + j.position.x + " y" + j.position.y + " SOP: x" + x + " y" + y);
+	if (j.position.x > x) {
+	    j.toLeft();
+	} else if (j.position.x < x) {
+	    j.toRight();
+	} else if (j.position.y > y) {
+	    j.toTop();
+	} else if (j.position.y < y) {
+	    j.toBottom();
 	}
     }
 
     public void moveJoueur(final int x, final int y) {
-	if(Joueur.position.x > x) {
+	if (Joueur.position.x == x && Joueur.position.y == y) {
+	    joueur.reinitialiser();
+	} else if (Joueur.position.x > x) {
 	    joueur.toLeft();
-	} else if(Joueur.position.x < x) {
+	} else if (Joueur.position.x < x) {
 	    joueur.toRight();
-	} else if(Joueur.position.y > y) {
+	} else if (Joueur.position.y > y) {
 	    joueur.toTop();
-	} else if(Joueur.position.y < y) {
+	} else if (Joueur.position.y < y) {
 	    joueur.toBottom();
 	}
     }
@@ -87,9 +78,19 @@ public class vJoueurs extends Pane {
     public vJoueur getJoueur() {
 	return joueur;
     }
-    
+
     public TranslateTransition getJTransition() {
 	return joueur.getTransition();
+    }
+
+    public vJoueur add(int id, int x, int y) {
+	vJoueur jr = new vJoueur(id, x, y);
+	this.getChildren().add(jr);
+	jr.setX(x * vJeu.modWidth);
+	jr.setY(y * vJeu.modHeight);
+	jr.setFitWidth(vJeu.modWidth);
+	jr.setPreserveRatio(true);
+	return jr;
     }
 
 }

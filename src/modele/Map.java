@@ -25,10 +25,20 @@ public class Map {
     }
 
     public int getTuile(int x, int y) {
-	return tabTuiles[x][y];
+	try {
+	    return tabTuiles[x][y];
+	} catch (ArrayIndexOutOfBoundsException e) {
+	    return -1;
+	}
+    }
+    
+    public void setTuile(int x, int y, int valeur) {
+	tabTuiles[x][y] = valeur;
     }
 
     public boolean isLibre(int x, int y) {
+	if(getTuile(x, y) != 0)
+	    System.out.println("CASE : " + getTuile(x, y));
 	return getTuile(x, y) == 0;
     }
 
