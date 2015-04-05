@@ -9,12 +9,6 @@ import controleur.Controleur;
 import controleur.General;
 import java.util.Observable;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import modele.Map;
 
@@ -24,7 +18,6 @@ import modele.Map;
  */
 public class vJeu extends Vue {
 
-    private static final String lienBack = "assets/background/purple.png";
     public static double modWidth;
     public static double modHeight;
 
@@ -39,9 +32,6 @@ public class vJeu extends Vue {
 	modWidth = General.WINDOW_WIDTH / Map.MAP_WIDTH;
 	modHeight = modWidth;
 	vb = (Pane) scene.getRoot();
-	vb.setBackground(new Background(
-		new BackgroundImage(new Image(lienBack), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)
-	));
 	scene.getStylesheets().add("style/style.css");
 	map = new vMap(tabMap);
 	hud = new HUD(this);

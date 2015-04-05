@@ -40,7 +40,7 @@ public class cLancement extends Controleur {
     @Override
     public void lancer() {
 	mJeu.demandeMap();
-	vue = new vJeu(this, mJeu.getMap().getTab(), WINDOW_WIDTH, WINDOW_HEIGHT);
+	vue = new vJeu(this, mJeu.getMap().getTab(), WINDOW_WIDTH, WINDOW_HEIGHT - 80);
 	joueurs = vue.getJoueurs();
 	vue.show();
 	vue.getStage().setOnCloseRequest((event) -> {
