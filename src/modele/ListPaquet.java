@@ -16,8 +16,14 @@ import java.util.logging.Logger;
  *
  */
 public class ListPaquet extends ArrayList<Paquet> {
+    
+    private boolean run;
 
     public ListPaquet() {
+    }
+    
+    public void start() {
+	run = true;
     }
 
     /**
@@ -26,6 +32,8 @@ public class ListPaquet extends ArrayList<Paquet> {
      * @return
      */
     public Paquet waitPaquet(String commande) {
+	if(!run)
+	    return null;
 	Paquet ret;
 	for (Iterator<Paquet> ite = this.iterator(); ite.hasNext();) {
 	    ret = ite.next();
@@ -40,6 +48,10 @@ public class ListPaquet extends ArrayList<Paquet> {
 	    Logger.getLogger(ListPaquet.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	return waitPaquet(commande);
+    }
+
+    public void stop() {
+	run = false;
     }
 
 }

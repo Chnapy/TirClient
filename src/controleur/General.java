@@ -23,10 +23,6 @@ public class General {
     public static final double WINDOW_WIDTH = 1422 * RATIO_X;
     public static final double WINDOW_HEIGHT = 800 * RATIO_Y;
 
-    public static void pln(String str) {
-	System.out.println(str);
-    }
-
     public static double getLastX(Node node) {
 	double width = node.getBoundsInLocal().getWidth();
 	if (width == 0) {

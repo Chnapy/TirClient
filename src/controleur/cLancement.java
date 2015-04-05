@@ -7,8 +7,7 @@ package controleur;
 
 import static controleur.General.WINDOW_HEIGHT;
 import static controleur.General.WINDOW_WIDTH;
-import java.util.Observable;
-import java.util.Observer;
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.TranslateTransition;
@@ -18,8 +17,10 @@ import javafx.scene.input.MouseEvent;
 import modele.InputReader;
 import modele.Joueur;
 import modele.Paquet;
+import modele.Son;
 import modele.mConnexion;
 import modele.mJeu;
+import vue.Erreur;
 import vue.vJeu;
 import vue.vJoueurs;
 
@@ -45,6 +46,7 @@ public class cLancement extends Controleur {
 	vue.getStage().setOnCloseRequest((event) -> {
 	    mConnexion.deconnexion();
 	    vue.stop();
+	    stop();
 	});
 	vue.getStage().getScene().setOnKeyPressed((KeyEvent event) -> {
 	    try {
@@ -75,44 +77,98 @@ public class cLancement extends Controleur {
 	new Thread(() -> {
 	    while (run) {
 		Paquet paq = InputReader.listPaquet.waitPaquet("nc");
-		System.out.println("Nouveau joueur connecté ! " + paq.getFirstMessage());
-		Platform.runLater(() -> {
-		    joueurs.add(Integer.parseInt(paq.getFirstMessage()), Integer.parseInt(paq.getMessage(1)), Integer.parseInt(paq.getMessage(2)));
-		});
+		if (paq != null) {
+		    Platform.runLater(() -> {
+			joueurs.add(Integer.parseInt(paq.getFirstMessage()), paq.getMessage(1), Integer.parseInt(paq.getMessage(2)), Integer.parseInt(paq.getMessage(3)));
+			vue.hud.chat.add("Nouveau joueur entrant : " + paq.getMessage(1), "nc");
+			vue.hud.listJoueurs.add(paq.getMessage(1), joueurs.getJoueur(Integer.parseInt(paq.getFirstMessage())).getImage());
+		    });
+		}
 	    }
+	    System.err.println("Fin thread connectes");
 	}).start();
 
 	new Thread(() -> {
 	    while (run) {
 		Paquet paq = InputReader.listPaquet.waitPaquet("move2");
-		System.out.println("move2 : x" + Integer.parseInt(paq.getMessage(1)) + " y" + Integer.parseInt(paq.getMessage(2)));
-		Platform.runLater(() -> {
-		    joueurs.move(Integer.parseInt(paq.getFirstMessage()), Integer.parseInt(paq.getMessage(1)), Integer.parseInt(paq.getMessage(2)));
-		});
+		if (paq != null) {
+		    System.out.println("move2 : x" + Integer.parseInt(paq.getMessage(1)) + " y" + Integer.parseInt(paq.getMessage(2)));
+		    Platform.runLater(() -> {
+			joueurs.move(Integer.parseInt(paq.getFirstMessage()), Integer.parseInt(paq.getMessage(1)), Integer.parseInt(paq.getMessage(2)));
+		    });
+		}
 	    }
+	    System.err.println("Fin thread move2");
 	}).start();
 
 	new Thread(() -> {
 	    while (run) {
 		Paquet paq = InputReader.listPaquet.waitPaquet("tire");
-		Platform.runLater(() -> {
-		    tirer(paq.getFirstMessageToInt(), paq.getMessageToInt(1), paq.getMessageToInt(2));
-		});
+		if (paq != null) {
+		    Platform.runLater(() -> {
+			tirer(paq.getFirstMessageToInt(), paq.getMessageToInt(1), paq.getMessageToInt(2));
+		    });
+		}
 	    }
+	    System.err.println("Fin thread tirs");
+	}).start();
+
+	new Thread(() -> {
+	    while (run) {
+		Paquet paq = InputReader.listPaquet.waitPaquet("degats");
+		if (paq != null) {
+		    Platform.runLater(() -> {
+			degats(paq.getFirstMessageToInt());
+		    });
+		}
+	    }
+	    System.err.println("Fin thread degats");
+	}).start();
+
+	new Thread(() -> {
+	    while (run) {
+		Paquet paq = InputReader.listPaquet.waitPaquet("mort");
+		if (paq != null) {
+		    Platform.runLater(() -> {
+			vue.hud.chat.add(joueurs.getJoueur(paq.getFirstMessageToInt()).pseudo + " est mort", "mort");
+			mort(paq.getFirstMessageToInt());
+		    });
+		}
+	    }
+	    System.err.println("Fin thread morts");
+	}).start();
+
+	new Thread(() -> {
+	    while (run) {
+		try {
+		    sleep(5000);
+		    Platform.runLater(() -> {
+			ajoutMuni();
+		    });
+		} catch (InterruptedException ex) {
+		    Logger.getLogger(cLancement.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	    }
+	    System.err.println("Fin thread munitions");
 	}).start();
 
 	canTirer = true;
 	canMove = true;
 	canMoveTranslate = true;
+	Son.jouerMusic((int) (Math.random() * 6));
+	vue.hud.listJoueurs.add(Joueur.pseudo, joueurs.getJoueur().getImage());
+	vue.hud.chat.add("--- Partie initialisée ---", "info");
     }
 
     public void tirer(double mx, double my) {
 	int[] ret = joueurs.tirer(mx, my);
 	mConnexion.envoi("tire", Integer.toString(ret[0]), Integer.toString(ret[1]));
+	Son.jouerSon((int) (Math.random() * 3));
     }
 
     public void tirer(int id, double mx, double my) {
 	joueurs.tirer(id, mx, my);
+	Son.jouerSon((int) (Math.random() * 3));
     }
 
     public void actionJoueur(final String keytext) throws Exception {
@@ -139,6 +195,7 @@ public class cLancement extends Controleur {
 	if (cLancement.joueurCanMove(x, y)) {
 	    joueurs.moveJoueur(x, y);
 	    mConnexion.envoiPos(x, y);
+	    Son.jouerSon(3, Math.random() / 4 + 4);
 	    System.out.println("Attente move...");
 	    Paquet paq = InputReader.listPaquet.waitPaquet("move");
 	    if (canMove(paq, x, y)) {
@@ -164,6 +221,44 @@ public class cLancement extends Controleur {
 
     public static boolean joueurCanMove(int x, int y) {
 	return mJeu.getMap().isLibre(x, y);
+    }
+
+    private void degats(int degats) {
+	vue.getHud().getStats().delVies(degats);
+	Joueur.vie--;
+	if (Joueur.vie <= 0) {
+	    mortJoueur();
+	}
+    }
+
+    private void mortJoueur() {
+	canTirer = false;
+	canMove = false;
+	canMoveTranslate = false;
+	joueurs.del(joueurs.getJoueur());
+	Erreur.afficher("Mort", "Vous êtes mort !\nVous pouvez continuer à regarder le combat, ou faire quelque chose de plus intéressant...");
+    }
+
+    private void ajoutMuni() {
+	if (Joueur.munitions < 10) {
+	    Joueur.munitions++;
+	    vue.getHud().getStats().addMunitions(1);
+	}
+    }
+
+    private void mort(int id) {
+	joueurs.getChildren().remove(joueurs.getJoueur(id));
+    }
+
+    private void stop() {
+
+	run = false;
+	canTirer = false;
+	canMove = false;
+	canMoveTranslate = false;
+	vue.hud.temps.stop();
+	joueurs.stop();
+	Son.stop();
     }
 
 }

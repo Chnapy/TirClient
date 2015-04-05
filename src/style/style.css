@@ -20,3 +20,41 @@
 #option1 {
     -fx-background-color: transparent;
 }
+
+.error, .nc, .mort, .general, .info {
+    -fx-font-family: "Comic sans ms";
+    -fx-font-size: 16px;
+}
+
+.error {
+    -fx-text-fill: red;
+}
+
+.nc {
+    -fx-text-fill: green;
+}
+
+.mort {
+    -fx-text-fill: orange;
+}
+
+.general {
+    -fx-text-fill: blue;
+}
+
+.info {
+    -fx-text-fill: white;
+}
+
+#temps {
+    -fx-font-family: "Open Sans";
+    -fx-font-size: 30px;
+    -fx-text-fill: white;
+}
+
+.labList {
+    -fx-font-family: "Open Sans";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}

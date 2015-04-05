@@ -6,6 +6,7 @@
 package vue;
 
 import controleur.General;
+import controleur.cMain;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,9 +29,14 @@ public class Options extends HBox {
 	getChildren().addAll(getButton(deconnecterImage), getButton(fermerImage));
 	setWidth(maxwidth);
 
+	((Button) getChildren().get(0)).setOnAction((event) -> {
+	    hud.deconnexion();
+	    new cMain().lancer();
+	});
 	((Button) getChildren().get(1)).setOnAction((event) -> {
 	    hud.deconnexion();
 	});
+
     }
 
     private Button getButton(Image image) {

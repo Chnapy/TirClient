@@ -17,11 +17,11 @@ public class HUD extends Group {
 
     private final vJeu vue;
 
-    private Stats stats;
-    private Chat chat;
-    private ListJoueurs listJoueurs;
-    private Options options;
-    private Temps temps;
+    public final Stats stats;
+    public final Chat chat;
+    public final ListJoueurs listJoueurs;
+    public final Options options;
+    public final Temps temps;
 
     public HUD(vJeu vu) {
 	vue = vu;

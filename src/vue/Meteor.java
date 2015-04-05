@@ -5,9 +5,11 @@
  */
 package vue;
 
+import controleur.General;
 import javafx.animation.RotateTransition;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import modele.Map;
 
 /**
  * Meteor.java
@@ -30,9 +32,11 @@ public class Meteor extends ImageView {
 
     public Meteor() {
 	super(prepath + images[(int) (Math.random() * images.length)]);
+	this.setFitWidth(General.WINDOW_WIDTH / Map.MAP_WIDTH);
+	this.setPreserveRatio(true);
 	rotationAnimation = new RotateTransition(new Duration(10000), this);
 	rotationAnimation.setByAngle(360f);
-	rotationAnimation.setCycleCount(10);
+	rotationAnimation.setCycleCount(RotateTransition.INDEFINITE);
 	rotationAnimation.play();
 
     }

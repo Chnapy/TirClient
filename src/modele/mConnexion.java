@@ -54,6 +54,7 @@ public class mConnexion {
 		    new BufferedReader(new InputStreamReader(socketClient.getInputStream()))
 	    );
 	    inputReader.start();
+	    InputReader.listPaquet.start();
 	    sout = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream())));
 	    System.out.println("-Socket, reader, writer OK");
 	} catch (IOException ex) {

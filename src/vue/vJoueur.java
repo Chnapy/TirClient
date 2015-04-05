@@ -5,11 +5,14 @@
  */
 package vue;
 
+import controleur.General;
 import java.awt.Point;
 import javafx.animation.TranslateTransition;
+import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import modele.Joueur;
+import modele.Map;
 
 /**
  * vJoueur.java
@@ -17,8 +20,8 @@ import modele.Joueur;
  */
 public class vJoueur extends ImageView {
 
-    private static final String prepathP = "assets/player/";
-    private static final String[] joueurs = {
+    public static final String prepathP = "assets/player/";
+    public static final String[] joueurs = {
 	"playerShip1_blue.png",
 	"playerShip1_green.png",
 	"playerShip1_orange.png",
@@ -35,18 +38,32 @@ public class vJoueur extends ImageView {
     private static final int temps = 300;
     private final TranslateTransition transition;
     public final Point position;
+    public final String pseudo;
 
     public final int ID;
 
-    public vJoueur(final int id, int x, int y) {
+    public vJoueur(final int id, final String pseudo, int x, int y) {
 	super(prepathP + joueurs[id % joueurs.length]);
+	this.setFitWidth(General.WINDOW_WIDTH / Map.MAP_WIDTH);
+	this.setPreserveRatio(true);
 	ID = id;
+	if (pseudo != null) {
+	    this.pseudo = pseudo;
+	} else {
+	    this.pseudo = "J" + id;
+	}
 	transition = new TranslateTransition(new Duration(temps), this);
 	transition.setOnFinished((event) -> {
 	    transition.setByX(0);
 	    transition.setByY(0);
 	});
 	position = new Point(x, y);
+	setOnMouseEntered((event) -> {
+	    setCursor(Cursor.HAND);
+	});
+	setOnMouseExited((event) -> {
+	    setCursor(Cursor.DEFAULT);
+	});
     }
 
     public void toTop() {

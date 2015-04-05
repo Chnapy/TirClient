@@ -30,11 +30,12 @@ public class vJeu extends Vue {
 
     private final vMap map;
     private final vJoueurs joueurs;
-    private final HUD hud;
+    public final HUD hud;
     private final Pane vb;
 
     public vJeu(Controleur controleur, int[][] tabMap, double width, double height) {
 	super(controleur, new Pane(), width, height);
+	stage.setTitle("Jeu de tir en réseaux - par R.HADDAD");
 	modWidth = General.WINDOW_WIDTH / Map.MAP_WIDTH;
 	modHeight = modWidth;
 	vb = (Pane) scene.getRoot();
@@ -43,8 +44,8 @@ public class vJeu extends Vue {
 	));
 	scene.getStylesheets().add("style/style.css");
 	map = new vMap(tabMap);
-	joueurs = new vJoueurs(tabMap);
 	hud = new HUD(this);
+	joueurs = new vJoueurs(this, tabMap);
 	add(map, joueurs, hud);
     }
 

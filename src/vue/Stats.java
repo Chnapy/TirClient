@@ -18,27 +18,27 @@ import javafx.scene.layout.VBox;
 public class Stats extends VBox {
 
     private static final Image vieImage = new Image("/assets/hud/stats/coeur.png");
-    private static final Image puissanceImage = new Image("/assets/hud/stats/puissance.png");
+//    private static final Image puissanceImage = new Image("/assets/hud/stats/puissance.png");
     private static final Image munitionImage = new Image("/assets/hud/stats/munition.png");
     
     private static final double SPACING = 2;
 
     private HBox vies;
-    private HBox puissances;
+//    private HBox puissances;
     private HBox munitions;
 
     public Stats() {
 	vies = new HBox();
-	puissances = new HBox();
+//	puissances = new HBox();
 	munitions = new HBox();
-	getChildren().addAll(vies, puissances, munitions);
+	getChildren().addAll(vies, munitions);
 	
 	vies.setSpacing(SPACING);
-	puissances.setSpacing(SPACING);
+//	puissances.setSpacing(SPACING);
 	munitions.setSpacing(SPACING);
 	
 	addVies(10);
-	addPuissances(10);
+//	addPuissances(10);
 	addMunitions(10);
     }
 
@@ -63,17 +63,17 @@ public class Stats extends VBox {
 	}
     }
 
-    public void addPuissances(int n) {
-	for (int i = 0; i < n; i++) {
-	    puissances.getChildren().add(getImage(puissanceImage));
-	}
-    }
-
-    public void delPuissances(int n) {
-	for (int i = 0; i < n; i++) {
-	    puissances.getChildren().remove(puissances.getChildren().size() - 1);
-	}
-    }
+//    public void addPuissances(int n) {
+//	for (int i = 0; i < n; i++) {
+//	    puissances.getChildren().add(getImage(puissanceImage));
+//	}
+//    }
+//
+//    public void delPuissances(int n) {
+//	for (int i = 0; i < n; i++) {
+//	    puissances.getChildren().remove(puissances.getChildren().size() - 1);
+//	}
+//    }
 
     public void addMunitions(int n) {
 	for (int i = 0; i < n; i++) {

@@ -59,6 +59,7 @@ public class InputReader implements Runnable {
 	} catch (IOException ex) {
 	    Logger.getLogger(InputReader.class.getName()).log(Level.SEVERE, null, ex);
 	}
+	listPaquet.stop();
     }
 
 }

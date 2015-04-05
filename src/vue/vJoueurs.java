@@ -8,6 +8,7 @@ package vue;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import modele.Joueur;
 
@@ -19,19 +20,21 @@ public class vJoueurs extends Pane {
 
     private vJoueur joueur;
 
-    public vJoueurs(int[][] map) {
+    public vJoueurs(vJeu vue, int[][] map) {
 	joueur = null;
-	applyMap(map);
+	applyMap(vue, map);
     }
 
-    private void applyMap(final int[][] map) {
+    private void applyMap(vJeu vue, final int[][] map) {
 
 	for (int i = 0; i < map.length; i++) {
 	    for (int j = 0; j < map[0].length; j++) {
 		if (map[i][j] >= 2) {
-		    vJoueur jr = add(map[i][j] - 2, i, j);
+		    vJoueur jr = add(map[i][j] - 2, null, i, j);
 		    if (joueur == null && map[i][j] - 2 == Joueur.ID) {
 			joueur = jr;
+		    } else {
+			vue.hud.listJoueurs.add("J" + (map[i][j] - 2), new Image(vJoueur.prepathP + vJoueur.joueurs[(map[i][j] - 2) % vJoueur.joueurs.length]));
 		    }
 		}
 	    }
@@ -85,8 +88,8 @@ public class vJoueurs extends Pane {
 	return joueur.getTransition();
     }
 
-    public vJoueur add(int id, int x, int y) {
-	vJoueur jr = new vJoueur(id, x, y);
+    public vJoueur add(int id, String pseudo, int x, int y) {
+	vJoueur jr = new vJoueur(id, pseudo, x, y);
 	this.getChildren().add(jr);
 	jr.setX(x * vJeu.modWidth);
 	jr.setY(y * vJeu.modHeight);
@@ -115,6 +118,21 @@ public class vJoueurs extends Pane {
 	});
 	laser.lancerAutrement(jr.getX() + jr.getTranslateX(), jr.getY() + jr.getTranslateY(), jr.getFitWidth() / 2, jr.getFitHeight() / 2, mx, my);
 	jr.setRotate(laser.getRotate());
+    }
+
+    public void del(int id) {
+	del(getJoueur(id));
+    }
+
+    public void del(vJoueur joueur) {
+	joueur.getTransition().stop();
+	getChildren().remove(joueur);
+    }
+
+    public void stop() {
+	this.getChildren().stream().forEach((jr) -> {
+	    ((vJoueur) jr).getTransition().stop();
+	});
     }
 
 }
